@@ -16,16 +16,19 @@ use Illuminate\Support\Facades\Request;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
 Route::group(['prefix' => \App\Http\Middleware\Locale::getLocale()], function (){
-	Route::get('/', function () {
-		return view('welcome');
-	});
+	Route::get('/', 'HomeController@index')->name('home');
+	Route::post('answer/add', 'AnswersController@store');
+	Route::get('chat/{type}', 'ChatsController@index')->name('chat');
+	//Route::post();
 
 	Auth::routes();
 
-	Route::get('/home', 'HomeController@index')->name('home');
 });
-
+/**
+ * Переключение языков
+ */
 Route::get('setlocale/{lang}', function ($lang) {
 	$referer = Redirect::back()->getTargetUrl();
 	$parse_url = parse_url($referer, PHP_URL_PATH);
